@@ -1,16 +1,31 @@
 # -*- coding: utf-8 -*-
 
 from time import sleep
+import board
+import busio
+import adafruit_ads1x15.ads1115 as ADS
+from adafruit_ads1x15.analog_in import AnalogIn
 import sys
 import random
 import cloud4rpi
 import ds18b20
 import rpi
-import RPi.GPIO as GPIO  # pylint: disable=F0401
 
+
+i2c = busio.I2C(board.SCL, board.SDA)
+ads=ADS.ADS1115(i2c)
+efficacy = 21.856
+area = 3.2*(10**-6)
+chan=AnalogIn(ads, ADS.P0)
+
+def sensor1():
+	voltage = chan.voltage
+	logLux = voltage * 5.0/3.3
+	millilux = pow(10, logLux)*(10**(-3))
+	return millilux - 36
 # Put your device token here. To get the token,
 # sign up at https://cloud4rpi.io and create a device.
-DEVICE_TOKEN = '__YOUR_DEVICE_TOKEN__'
+DEVICE_TOKEN = 'AQ9zBj6KjdR2b761douGif4Ns'
 
 # Constants
 LED_PIN = 12
@@ -18,15 +33,7 @@ DATA_SENDING_INTERVAL = 30  # secs
 DIAG_SENDING_INTERVAL = 60  # secs
 POLL_INTERVAL = 0.5  # 500 ms
 
-# Configure GPIO library
-GPIO.setmode(GPIO.BOARD)
-GPIO.setup(LED_PIN, GPIO.OUT)
 
-
-# Handler for the button or switch variable
-def led_control(value=None):
-    GPIO.output(LED_PIN, value)
-    return GPIO.input(LED_PIN)
 
 
 def listen_for_events():
@@ -42,37 +49,17 @@ def listen_for_events():
 
 
 def main():
-    # Load w1 modules
-    ds18b20.init_w1()
-
-    # Detect ds18b20 temperature sensors
-    ds_sensors = ds18b20.DS18b20.find_all()
-
     # Put variable declarations here
     # Available types: 'bool', 'numeric', 'string'
     variables = {
-        'Room Temp': {
-            'type': 'numeric',
-            'bind': ds_sensors[0] if ds_sensors else None
-        },
-        # 'Outside Temp': {
-        #     'type': 'numeric',
-        #     'bind': ds_sensors[1] if len(ds_sensors) > 1 else None
-        # },
-        'LED On': {
-            'type': 'bool',
-            'value': False,
-            'bind': led_control
-        },
-        'CPU Temp': {
-            'type': 'numeric',
-            'bind': rpi.cpu_temp
-        },
         'STATUS': {
             'type': 'string',
             'bind': listen_for_events
-        }
-    }
+        },
+	'SENSOR1': {
+           'type': 'numeric',
+           'bind': sensor1		
+   } }
 
     diagnostics = {
         'CPU Temp': rpi.cpu_temp,
