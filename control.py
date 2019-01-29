@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+https://en.wikipedia.org/wiki/Biharmonic_equation# -*- coding: utf-8 -*-
 
 from time import sleep
 import board
@@ -18,17 +18,19 @@ efficacy = 21.856
 area = 3.2*(10**-6)
 chan1=AnalogIn(ads, ADS.P0)
 chan2=AnalogIn(ads, ADS.P1)
+
 def sensor1():
 	voltage = chan1.voltage
 	logLux = voltage * 5.0/3.0
-	millilux = pow(10, logLux)*(10**(-3))
-	return millilux - 36
+	lux = pow(10, logLux)*(10**(-4))
+	return lux - 36
 
 def senso2():
 	voltage = chan2.voltage
 	logLux = voltage* 5.0/3.0
-	millilux =pow(10, logLux)*(10**(-3))
-	return millilux - 36
+	lux =pow(10, logLux)*(10**(-4))
+	return lux - 36
+
 # Put your device token here. To get the token,
 # sign up at https://cloud4rpi.io and create a device.
 DEVICE_TOKEN = 'AQ9zBj6KjdR2b761douGif4Ns'
