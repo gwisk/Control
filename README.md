@@ -54,3 +54,4 @@ You can use this control panel to monitor variables and control a logical state 
 * [Examples for ESP8266](https://github.com/cloud4rpi/cloud4rpi-esp8266-micropython)
 * [Client Library](https://github.com/cloud4rpi/cloud4rpi)
 * [Documentation Repository](https://github.com/cloud4rpi/docs)
+# Control
