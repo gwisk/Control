@@ -22,14 +22,14 @@ chan2=AnalogIn(ads, ADS.P1)
 def sensor1():
 	voltage = chan1.voltage
 	logLux = voltage * 5.0/3.0
-	lux = pow(10, logLux)*(10**(-4))
-	return lux - 36
+	lux = pow(10, logLux)
+	return lux 
 
 def senso2():
 	voltage = chan2.voltage
 	logLux = voltage* 5.0/3.0
-	lux =pow(10, logLux)*(10**(-4))
-	return lux - 36
+	lux =pow(10, logLux)
+	return lux 
 
 # Put your device token here. To get the token,
 # sign up at https://cloud4rpi.io and create a device.
